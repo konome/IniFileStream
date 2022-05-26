@@ -1,1 +1,1 @@
-# INI File Parser
+# ini-parser
