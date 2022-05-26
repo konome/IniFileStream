@@ -32,7 +32,6 @@ catch (Exception e)
 }
 ```
 
-
 ### Read all keys from all sections:
 ```csharp
 try
