@@ -1,9 +1,8 @@
 #  IniFileStream - INI File Parser for .NET
 An INI file parser for .NET. Provides the `IniFileStream` class to read and write INI files without the use of P/invoke. 
 
-## Sample 1
+## Sample 1: Read keys from a specific section
 ```csharp
-// Read all keys from a specific section in a .ini file using IniFileStream.cs.
 try
 {
     var ini = new IniFileStream("config.ini");
@@ -31,9 +30,8 @@ catch (Exception e)
 ```
 
 
-## Sample 2
+## Sample 2: Read all keys from all sections.
 ```csharp
-// Read all keys from all sections in a .ini file using IniFileStream.cs.
 try
 {
     var ini = new IniFileStream("config.ini");
