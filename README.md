@@ -1,6 +1,6 @@
 #  IniFileStream - INI File Parser for .NET
-An INI file parser for .NET. Provides the `IniFileStream` class to read and write INI files without the use of P/invoke.
-
+An INI file parser for .NET that allows you to integrate basic configuration files in your application. Provides the `IniFileStream` class to read and write INI files without the use of P/invoke.
+ 
 
 ## Samples
 
