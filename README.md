@@ -4,7 +4,7 @@ An INI file parser for .NET. Provides the `IniFileStream` class to read and writ
 
 ## Samples
 
-### 1. Read keys from a specific section:
+### 1. Read keys from a specific section
 ```csharp
 try
 {
@@ -32,7 +32,7 @@ catch (Exception e)
 }
 ```
 
-### 2. Read all keys from all sections:
+### 2. Read all keys from all sections
 ```csharp
 try
 {
