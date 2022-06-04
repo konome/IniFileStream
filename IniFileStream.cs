@@ -218,7 +218,6 @@ namespace Konome
             ValidateSections();
         }
 
-
         private void ValidateSections()
         {
             Sections.Clear();
