@@ -1,4 +1,4 @@
-// INI File Parser for .NET
+// IniFileStream - INI File Parser for .NET
 // Copyright (c) 2022 konome
 // MIT License
 
