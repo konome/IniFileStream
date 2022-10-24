@@ -10,14 +10,29 @@ using System.Text;
 
 namespace Konome
 {
-    public class IniFileStream
+    public class IniFile
     {
-        public FileInfo Path { get; }
-        public List<string> Text { get; }
-        public List<string> Sections { get; }
-        public char Delimiter { get; }
+        public FileInfo Path { get; set; }
+        public List<string> Text { get; protected set; }
+        public List<string> Sections { get; protected set; }
+        public char Delimiter { get; protected set; }
 
-        public IniFileStream(string? file = null, char? delimiter = null)
+        public IniFile(string? file = null, bool init_file = true, char? delimiter = null)
+        {
+            List<string> buffer = new();
+
+            if(init_file)
+                Initialize(file, out buffer);
+
+            Text = buffer;
+            Sections = new List<string>();
+            Delimiter = delimiter ?? '=';
+
+            ValidateSections();
+            CleanEnd();
+        }
+
+        protected virtual void Initialize(string file, out List<string> buffer)
         {
             if (string.IsNullOrEmpty(file))
                 file = "config.ini";
@@ -32,15 +47,10 @@ namespace Konome
             byte[] bytes = File.ReadAllBytes(Path.FullName);
             string str = Encoding.UTF8.GetString(bytes);
 
-            Text = str.Split(Environment.NewLine).ToList();
-            Sections = new List<string>();
-            Delimiter = delimiter ?? '=';
-
-            ValidateSections();
-            CleanEnd();
+            buffer = str.Split(Environment.NewLine).ToList();
         }
 
-        public void WriteKey(string key, string? value, string section, bool writeBuffer = true)
+        public virtual void WriteKey(string key, string? value, string section, bool writeBuffer = true)
         {
             string? str = key + Delimiter + value;
 
@@ -93,7 +103,7 @@ namespace Konome
                 Write();
         }
 
-        public Dictionary<string, string> GetKeysFromSection(
+        public virtual Dictionary<string, string> GetKeysFromSection(
             string section, out Dictionary<string, int> indexArr, out int indexSection)
         {
             Dictionary<string, string> keys = new();
@@ -135,7 +145,7 @@ namespace Konome
             return keys;
         }
 
-        public string ReadKey(string key, string section)
+        public virtual string ReadKey(string key, string section)
         {
             string? value = string.Empty;
             Dictionary<string, string> keys = GetKeysFromSection(section);
@@ -155,7 +165,7 @@ namespace Konome
             return value;
         }
 
-        public void DeleteSection(string section)
+        public virtual void DeleteSection(string section)
         {
             GetKeysFromSection(section, out Dictionary<string, int> keys, out int i);
 
@@ -173,7 +183,7 @@ namespace Konome
             Write();
         }
 
-        public void FixFormat()
+        public virtual void FixFormat()
         {
             // Fix extra white spaces between sections.
             Text.RemoveAll(x => x == string.Empty);
@@ -187,7 +197,7 @@ namespace Konome
             // Trim delimiter.
             foreach (string? section in Sections)
             {
-                Dictionary<string, string> keys = 
+                Dictionary<string, string> keys =
                     GetKeysFromSection(section, out Dictionary<string, int> indexArr, out _);
 
                 foreach (KeyValuePair<string, string> k in keys)
@@ -198,7 +208,7 @@ namespace Konome
             Write();
         }
 
-        public void CleanEnd()
+        public virtual void CleanEnd()
         {
             // Clean up line breaks at end of the buffer.
             int i = Text.Count - 1;
@@ -252,12 +262,12 @@ namespace Konome
             }
         }
 
-        public int FindSection(string section) => Text.IndexOf($"[{section}]");
+        public virtual int FindSection(string section) => Text.IndexOf($"[{section}]");
 
-        public void DeleteKey(string key, string section) 
+        public virtual void DeleteKey(string key, string section)
             => WriteKey(key, null, section);
-        
-        public Dictionary<string, string> GetKeysFromSection(string section) 
+
+        public virtual Dictionary<string, string> GetKeysFromSection(string section)
             => GetKeysFromSection(section, out _, out _);
     }
 }
